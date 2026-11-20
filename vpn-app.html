@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MARTATOR VPN</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#05080f;color:white;
+ font-family:Arial,sans-serif;min-height:100vh;
+ overflow-x:hidden
+}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:0}
+.app{position:relative;z-index:1;max-width:480px;margin:auto;padding:25px 18px}
+header{text-align:center;padding:22px 0}
+.logo{font-size:29px;font-weight:900;letter-spacing:3px;color:#35aaff}
+.sub{color:#8193aa;font-size:12px;letter-spacing:3px;margin-top:7px}
+.card{background:#101a2b;border:1px solid #1c3858;border-radius:20px;padding:22px;margin:16px 0}
+.status{text-align:center;color:#91a9c4;font-size:13px}
+.orb{width:145px;height:145px;border-radius:50%;margin:25px auto;
+ border:2px solid #168be9;box-shadow:0 0 35px #087ee866;
+ display:flex;align-items:center;justify-content:center;font-size:48px}
+button{border:0;border-radius:13px;padding:16px;color:white;
+ background:linear-gradient(100deg,#0879d9,#20aaff);
+ font-weight:bold;font-size:16px;width:100%;cursor:pointer}
+button:active{opacity:.8}
+.secondary{background:#182a42;margin-top:10px}
+h3{margin-top:0}
+.server{display:flex;justify-content:space-between;align-items:center;
+ padding:15px;background:#0b1422;border:1px solid #20344e;
+ border-radius:12px;margin-top:10px}
+.muted{color:#91a5bf;font-size:12px}
+nav{display:flex;gap:8px;margin-top:20px}
+nav button{font-size:12px;padding:13px 5px;background:#17263b}
+footer{text-align:center;color:#61748d;font-size:11px;margin:30px 0}
+</style>
+</head>
+<body>
+<canvas id="snow"></canvas>
+<div class="app">
+<header>
+<div class="logo">MARTATOR VPN</div>
+<div class="sub">SECURE CONNECTION</div>
+</header>
+
+<section id="home">
+<div class="card">
+<div class="status" id="status">● НЕ ПОДКЛЮЧЕНО</div>
+<div class="orb">❄</div>
+<button onclick="connect()">ПОДКЛЮЧИТЬСЯ</button>
+<p class="muted" style="text-align:center">Защити своё соединение</p>
+</div>
+<div class="card">
+<h3>Ваш сервер</h3>
+<div class="server">
+<span>🇳🇱 Нидерланды</span>
+<span class="muted">Выбран</span>
+</div>
+</div>
+</section>
+
+<section id="servers" style="display:none">
+<div class="card">
+<h3>VPN СЕРВЕРЫ</h3>
+<div class="server">🇳🇱 Нидерланды <span>Выбрать</span></div>
+<div class="server">🇩🇪 Германия <span>Скоро</span></div>
+<div class="server">🇫🇮 Финляндия <span>Скоро</span></div>
+<p class="muted">Список серверов будет подключён после настройки VPN.</p>
+</div>
+</section>
+
+<section id="profile" style="display:none">
+<div class="card">
+<h3>МОЙ ПРОФИЛЬ</h3>
+<p>Пользователь Telegram</p>
+<p class="muted">Тариф: Бесплатный</p>
+<p class="muted">MARTATOR VPN</p>
+</div>
+</section>
+
+<nav>
+<button onclick="tab('home')">Главная</button>
+<button onclick="tab('servers')">Серверы</button>
+<button onclick="tab('profile')">Профиль</button>
+</nav>
+<footer>MARTATOR VPN © 2026</footer>
+</div>
+
+<script>
+const tg=window.Telegram?.WebApp;
+tg?.ready();
+tg?.expand();
+
+function tab(id){
+ ['home','servers','profile'].forEach(x=>{
+ document.getElementById(x).style.display=x===id?'block':'none';
+ });
+}
+function connect(){
+ document.getElementById('status').textContent=
+ '● СЕРВЕР ЕЩЁ НЕ ПОДКЛЮЧЁН';
+ tg?.showAlert('VPN-сервер ещё не настроен. Это интерфейс приложения.');
+}
+const canvas=document.getElementById('snow'),ctx=canvas.getContext('2d');
+let flakes=[];
+function resize(){
+ canvas.width=innerWidth;canvas.height=innerHeight;
+ flakes=Array.from({length:65},()=>({
+ x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+ r:Math.random()*2+1,s:Math.random()*1.2+.3
+ }));
+}
+function draw(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle='rgba(180,220,255,.7)';
+ flakes.forEach(f=>{
+ ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();
+ f.y+=f.s;if(f.y>canvas.height)f.y=0;
+ });
+ requestAnimationFrame(draw);
+}
+addEventListener('resize',resize);resize();draw();
+</script>
+</body>
+</html>
