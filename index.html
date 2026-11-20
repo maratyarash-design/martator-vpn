@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MARTATOR VPN</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#030811;color:white;
+ font-family:Arial,sans-serif;overflow-x:hidden;
+}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:5}
+header{
+ position:sticky;top:0;z-index:10;
+ background:#050b15eF;border-bottom:1px solid #173b61;
+ padding:18px 7%;display:flex;justify-content:space-between;
+ align-items:center;backdrop-filter:blur(15px)
+}
+.logo{font-size:23px;font-weight:900;letter-spacing:2px}
+.logo span{color:#168cff}
+nav{display:flex;gap:12px}
+button{
+ cursor:pointer;border:1px solid #176bb5;
+ background:#07172a;color:white;padding:12px 19px;
+ border-radius:9px;font-weight:bold
+}
+button.active,.primary{
+ background:linear-gradient(110deg,#168cff,#0753b9);
+ border:0;box-shadow:0 0 25px #087cff55
+}
+main{max-width:1000px;margin:auto;padding:75px 22px}
+section{display:none;min-height:75vh}
+section.active{display:block}
+.hero{text-align:center;padding:65px 10px}
+.tag{color:#39aaff;letter-spacing:4px;font-size:12px}
+h1{font-size:clamp(38px,8vw,75px);margin:20px 0}
+h1 span{color:#168cff}
+.subtitle{color:#a9bad0;font-size:18px;line-height:1.7}
+.panel{
+ background:linear-gradient(145deg,#10253b,#07111e);
+ border:1px solid #174b78;border-radius:18px;
+ padding:30px;margin:25px 0;
+ box-shadow:0 0 35px #006eff18
+}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.item{
+ background:#0a1727;border:1px solid #183b5d;
+ border-radius:12px;padding:22px;text-align:center
+}
+.item h3{color:#39aaff}
+.download{text-align:center;padding:30px}
+small{color:#8297ae}
+footer{text-align:center;color:#73869c;padding:30px;border-top:1px solid #18334e}
+@media(max-width:600px){
+ header{padding:14px 12px}
+ .logo{font-size:17px}
+ nav{gap:5px}
+ button{padding:10px;font-size:12px}
+ main{padding:35px 15px}
+ .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<canvas id="snow"></canvas>
+<header>
+ <div class="logo">MARTATOR <span>VPN ❄</span></div>
+ <nav>
+  <button class="active" onclick="showPage('home',this)">Главная</button>
+  <button onclick="showPage('download',this)">Скачать</button>
+ </nav>
+</header>
+
+<main>
+<section id="home" class="active">
+ <div class="hero">
+  <div class="tag">NEXT GENERATION VPN</div>
+  <h1>MARTATOR <span>VPN</span></h1>
+  <p class="subtitle">
+   Твоя безопасность. Твои правила.<br>
+   Твоё подключение.
+  </p>
+  <button class="primary" onclick="showPage('download',document.querySelectorAll('nav button')[1])">
+   СКАЧАТЬ VPN
+  </button>
+ </div>
+ <div class="panel">
+  <h2>❄ MARTATOR VPN</h2>
+  <p class="subtitle">Новый игровой стиль. Современный интерфейс. Удобство на каждом устройстве.</p>
+ </div>
+ <div class="grid">
+  <div class="item"><h3>🛡 Защита</h3><p>Безопасность соединения</p></div>
+  <div class="item"><h3>⚡ Скорость</h3><p>Удобное подключение</p></div>
+  <div class="item"><h3>🎮 Gaming</h3><p>Стиль для геймеров</p></div>
+ </div>
+</section>
+
+<section id="download">
+ <div class="hero">
+  <div class="tag">DOWNLOAD CENTER</div>
+  <h1>СКАЧАТЬ <span>VPN</span></h1>
+  <p class="subtitle">Выбери свою платформу</p>
+ </div>
+ <div class="panel download">
+  <h2>🖥 Windows 11 / 10</h2>
+  <p class="subtitle">Версия для компьютера</p>
+  <button class="primary" onclick="alert('Файл Windows пока не опубликован. Скоро!')">
+   СКОРО
+  </button>
+  <p><small>Установочный файл появится после публикации клиента.</small></p>
+ </div>
+ <div class="panel download">
+  <h2>📱 Другие устройства</h2>
+  <p class="subtitle">Мобильная версия — в разработке.</p>
+ </div>
+</section>
+</main>
+
+<footer>
+ MARTATOR VPN © 2026<br>
+ <small>Твой мир. Твои правила.</small>
+</footer>
+
+<script>
+function showPage(id,btn){
+ document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ window.scrollTo(0,0);
+}
+const c=document.getElementById('snow');
+const ctx=c.getContext('2d');
+let flakes=[];
+function resize(){
+ c.width=innerWidth*devicePixelRatio;
+ c.height=innerHeight*devicePixelRatio;
+ ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+}
+resize();addEventListener('resize',resize);
+for(let i=0;i<100;i++){
+ flakes.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*2+1,v:Math.random()*1.5+.4});
+}
+function snow(){
+ ctx.clearRect(0,0,innerWidth,innerHeight);
+ ctx.fillStyle="rgba(210,235,255,.8)";
+ flakes.forEach(f=>{
+  ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();
+  f.y+=f.v;f.x+=Math.sin(f.y/30)*.4;
+  if(f.y>innerHeight){f.y=-5;f.x=Math.random()*innerWidth}
+ });
+ requestAnimationFrame(snow);
+}
+snow();
+</script>
+</body>
+</html>
